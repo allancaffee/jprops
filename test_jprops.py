@@ -155,6 +155,20 @@ def test_escape_value_leading_whitespace():
   eq_(r'\ \ x\ty ', jprops._escape_value('  x\ty '))
 
 
+def test_stringify_value_handles_bools():
+  eq_('true', jprops._stringify_value(True))
+  eq_('false', jprops._stringify_value(False))
+
+
+def test_stringify_value_handles_numbers():
+  eq_('42', jprops._stringify_value(42))
+  eq_('2.25', jprops._stringify_value(2.25))
+
+def test_stringify_value_leaves_strings_alone():
+  eq_(u'\u00ff', jprops._stringify_value(u'\u00ff'))
+  eq_('string', jprops._stringify_value('string'))
+
+
 def test_escape_keys():
   eq_(r'\=', jprops._escape_key('='))
   eq_(r'\:', jprops._escape_key(':'))

@@ -62,7 +62,7 @@ def write_property(fh, key, value):
   """
   fh.write(_escape_key(key))
   fh.write('=')
-  fh.write(_escape_value(value))
+  fh.write(_escape_value(_stringify_value(value)))
   fh.write('\n')
 
 
@@ -167,6 +167,18 @@ def _escape(value, chars=''):
   value = re.sub(u'[\u0000-\u0019\u007f-\uffff]', _unicode_replace, value)
 
   return value.encode('latin-1')
+
+
+def _stringify_value(value):
+  if value is True:
+    return 'true'
+  if value is False:
+    return 'false'
+  if isinstance(value, (int, float)):
+    return str(value)
+  if isinstance(value, basestring):
+    return value
+  raise ValueError('Cannot encode value %r of type %s.' % (value, type(value)))
 
 
 def _unicode_replace(m):
